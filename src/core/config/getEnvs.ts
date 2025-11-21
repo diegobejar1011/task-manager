@@ -21,7 +21,10 @@ export const getEnvsValues = () => {
             user: envsVars.DB_USER,
             pass: envsVars.DB_PASS,
             name: envsVars.DB_NAME
-        }
+        },
+        salts: envsVars.SALTS,
+        secretKey: envsVars.SECRET_KEY,
+        expiresIn: envsVars.EXPIRES_IN
     };
 }
 

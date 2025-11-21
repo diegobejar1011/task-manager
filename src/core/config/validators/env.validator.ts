@@ -7,5 +7,8 @@ export const envValidator = Joi.object<EnvEntity>({
     DB_PORT: Joi.number().required(),
     DB_USER: Joi.string().required(),
     DB_PASS: Joi.string().required(),
-    DB_NAME: Joi.string().required()
+    DB_NAME: Joi.string().required(),
+    SALTS: Joi.number().required(),
+    SECRET_KEY: Joi.string().required(),
+    EXPIRES_IN: Joi.string().required()
 }).unknown(true);

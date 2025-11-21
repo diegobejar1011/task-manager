@@ -5,4 +5,7 @@ export interface EnvEntity {
     DB_USER: string;
     DB_PASS: string;
     DB_NAME: string;
+    SALTS: number;
+    SECRET_KEY: string;
+    EXPIRES_IN: string;
 }
