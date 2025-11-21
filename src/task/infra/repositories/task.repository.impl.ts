@@ -38,7 +38,7 @@ export class TaskRepositoryImpl implements TaskRepository {
     async findOne(id: number): Promise<Task> {
         try {
             const task = await this.taskRepository.findOne(
-                {where: {id}, relations: {comments: true, tags: true}}
+                {where: {id}, relations: {comments: true, tags: true, user: true}}
             );
             if (!task) throw new NotFoundException("Not found task!");
             return this.taskEntityMapper.toDomain(task);
@@ -50,7 +50,8 @@ export class TaskRepositoryImpl implements TaskRepository {
 
     async create(task: Task): Promise<void> {
         try {
-            const tags = await this.tagRepository.find({where: {id: In(task.tags.map((t) => t.id))}});
+
+            let tags = task.tags ? await this.tagRepository.find({where: {id: In(task.tags.map((t) => t.id))}}) : []; 
 
             const taskEntity = this.taskRepository.create({
                 title: task.title,
@@ -58,7 +59,8 @@ export class TaskRepositoryImpl implements TaskRepository {
                 isCompleted: task.isCompleted,
                 submissionDate: task.submissionDate,
                 comments: task.comments,
-                tags
+                tags,
+                user: {id: task.user!.id}
             });
 
             await this.taskRepository.save(taskEntity);

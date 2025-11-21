@@ -61,7 +61,8 @@ export class TaskController {
                         content: 'This comment is a test to test POST',
                     }
                     ],
-                    tagIds: [1]
+                    tagIds: [1],
+                    userId: 1
                 }
             }
         }

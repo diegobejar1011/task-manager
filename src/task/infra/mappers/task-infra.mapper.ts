@@ -1,8 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { CreateTaskDto as CreateTask, TaskDetailDto as TaskDetail, TaskSummaryDto as TaskSummary, UpdateTaskDto as UpdateTask } from "src/task/application/dtos";
-import { CommentDto, CreateTaskDto, TagDto, TaskDetailDto, TaskSummaryDto, UpdateTaskDto } from "../dtos";
+import { CommentDto, CreateCommentDto, CreateTaskDto, TagDto, TaskDetailDto, TaskSummaryDto, UpdateTaskDto } from "../dtos";
 import { CommentEntity } from "../entities/comment.entity";
 import { TagEntity } from "src/task/domain/entities";
+import { CreateCommentDto as CreateComment } from "src/task/application/dtos/create-comment.dto";
+import { UserEntity } from "src/users/domain/entities/user.entity";
+import { UserSummaryDto } from "src/users/infra/dtos/user-summary.dto";
 
 @Injectable()
 export class TaskInfraMapper {
@@ -11,8 +14,17 @@ export class TaskInfraMapper {
         return {
             title: createTaskDto.title,
             description: createTaskDto.description,
-            comments: createTaskDto.comments,
+            submissionDate: new Date(createTaskDto.submissionDate),
+            user: {id: createTaskDto.userId},
+            comments: createTaskDto.comments?.map(this.toCreateComment),
             tagIds: createTaskDto.tagIds
+        };
+    }
+
+    private toCreateComment(createCommentDto: CreateCommentDto, userId: number): CreateComment {
+        return {
+            content: createCommentDto.content,
+            user: {id: userId}
         };
     }
 
@@ -31,7 +43,7 @@ export class TaskInfraMapper {
                     t.id, 
                     t.title, 
                     t.isCompleted, 
-                    t.submissionDate != null ? t.submissionDate.toString() : null
+                    t.submissionDate!.toString()
                 )
             );
     }
@@ -41,10 +53,19 @@ export class TaskInfraMapper {
             task.title,
             task.description,
             task.isCompleted,
-            task.submissionDate != null ? task.submissionDate.toString() : null,
+            task.submissionDate.toString(),
             task.comments.map(this.toCommentDto),
-            task.tags.map(this.toTagDto)
+            task.tags.map(this.toTagDto),
+            this.toUserSummaryDto(task.user)
         );
+    }
+
+    private toUserSummaryDto(user: UserEntity): UserSummaryDto {
+        return {
+            id: user.id!,
+            firstName: user.firstName!,
+            lastName: user.lastName!
+        };
     }
 
     private toCommentDto(comment: CommentEntity): CommentDto {

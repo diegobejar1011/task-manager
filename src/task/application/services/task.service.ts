@@ -5,13 +5,17 @@ import { TaskAppMapper } from "../mappers/task-app.mapper";
 import { CommentEntity, TagEntity, TaskEntity } from "src/task/domain/entities";
 import { CreateTaskDto, TaskDetailDto, TaskSummaryDto, UpdateTaskDto } from "../dtos";
 import { PaginationEntity } from "src/shared/entities/pagination.entity";
+import { CreateCommentDto } from "src/task/infra/dtos";
+import { UserEntity } from "src/users/domain/entities/user.entity";
+import { UserService } from "src/users/application/services/user.service";
 
 @Injectable()
 export class TaskService {
     constructor(
         @Inject(TaskRepositoryImpl)
         private readonly taskRepository: TaskRepository,
-        private readonly taskAppMapper: TaskAppMapper
+        private readonly taskAppMapper: TaskAppMapper,
+        private readonly userService: UserService
     ) {}
 
     async findAll(pagination: PaginationEntity): Promise<TaskSummaryDto[]> {
@@ -26,14 +30,9 @@ export class TaskService {
 
     async create(createTaskDto: CreateTaskDto): Promise<void> {
 
-        const newTask: TaskEntity = new TaskEntity(
-            createTaskDto.title,
-            createTaskDto.description,
-            false,
-            null,
-            createTaskDto.comments.map((c) => new CommentEntity(c.content, new Date())),
-            createTaskDto.tagIds.map((id) => new TagEntity(id))
-        );
+        const user = await this.userService.findOne(createTaskDto.user.id);
+
+        const newTask: TaskEntity = this.taskAppMapper.toTask(createTaskDto, user);
 
         await this.taskRepository.create(newTask);
     }

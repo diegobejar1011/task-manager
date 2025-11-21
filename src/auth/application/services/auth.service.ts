@@ -23,8 +23,8 @@ export class AuthService {
         try {
             const user = await this.userService.findByEmail(login.email);
 
-            if(await this.encryptService.compare(login.password, user.password)) {
-                return this.authRepository.generateToken(new PayloadEntity(user.id!, user.email));
+            if(await this.encryptService.compare(login.password, user.password!)) {
+                return this.authRepository.generateToken(new PayloadEntity(user.id!, user.email!));
             }
             throw new BadRequestException("Wrong credentials!");
         } catch (error) {

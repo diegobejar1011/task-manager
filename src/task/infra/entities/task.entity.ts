@@ -1,6 +1,7 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { CommentEntity } from "./comment.entity";
 import { TagEntity } from "./tag.entity";
+import { UserEntity } from "src/users/infra/entities/user.entity";
 
 @Entity('tasks')
 export class TaskEntity {
@@ -14,11 +15,11 @@ export class TaskEntity {
     @Column({type: 'text'})
     description: string;
 
-    @Column({type: 'tinyint', default: 0})
+    @Column({type: 'boolean', default: false})
     isCompleted: boolean;
 
-    @Column({type: 'date', nullable: true})
-    submissionDate: Date | null;
+    @Column({type: 'date'})
+    submissionDate: Date;
 
     @OneToMany(() => CommentEntity, comment => comment.task, {cascade: ['insert', 'remove']})
     comments: CommentEntity[];
@@ -30,5 +31,9 @@ export class TaskEntity {
         inverseJoinColumn: {name: 'tag_id'}
     })
     tags: TagEntity[];
+
+    @ManyToOne(() => UserEntity, user => user.tasks)
+    @JoinColumn({name: 'user_id'})
+    user: UserEntity;
 
 }

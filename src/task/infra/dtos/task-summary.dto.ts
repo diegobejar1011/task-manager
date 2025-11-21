@@ -8,13 +8,13 @@ export class TaskSummaryDto {
     @ApiProperty()
     completed: boolean;
     @ApiProperty()
-    submissionDate: string | null;
+    submissionDate: string;
 
     constructor(
         id: number,
         title: string,
         completed: boolean,
-        submissionDate: string | null
+        submissionDate: string
     ) {
         this.id = id;
         this.title = title;

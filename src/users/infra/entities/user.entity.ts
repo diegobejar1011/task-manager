@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { CommentEntity } from "src/task/infra/entities/comment.entity";
+import { TaskEntity } from "src/task/infra/entities/task.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("users")
 export class UserEntity {
@@ -17,4 +19,10 @@ export class UserEntity {
 
     @Column({type: 'varchar', length: 264})
     password: string;
+
+    @OneToMany(() => TaskEntity, task => task.user)
+    tasks: TaskEntity[];
+
+    @OneToMany(() => CommentEntity, comment => comment.user)
+    comments: CommentEntity[];
 }

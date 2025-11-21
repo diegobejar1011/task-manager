@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsString } from "class-validator";
+import { IsArray, IsDateString, IsNumber, IsOptional, IsString } from "class-validator";
 import { CreateCommentDto } from "./create-comment.dto";
 
 export class CreateTaskDto {
@@ -16,20 +16,32 @@ export class CreateTaskDto {
     @IsString()
     description: string;
     @ApiProperty({
+        description: "submission date of task"
+    })
+    @IsDateString()
+    submissionDate: string;
+    @ApiProperty({
         description: "comments of task",
         type: CreateCommentDto,
-        isArray: true,
-        required: true
+        isArray: true
     })
+    @IsOptional()
     @IsArray()
-    comments: CreateCommentDto[];
+    comments?: CreateCommentDto[];
     @ApiProperty({
         description: "tags of task",
         type: 'number',
-        isArray: true,
+        isArray: true
+    })
+    @IsOptional()
+    @IsArray()
+    tagIds?: number[];
+    @ApiProperty({
+        description: "user's id who create task",
         required: true
     })
-    tagIds: number[];
+    @IsNumber()
+    userId: number; 
 }
 
 

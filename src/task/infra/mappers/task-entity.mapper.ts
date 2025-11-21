@@ -16,6 +16,7 @@ export class TaskEntityMapper {
             taskEntity.submissionDate,
             taskEntity.comments ? taskEntity.comments.map(c => this.toCommentDomain(c)) : [],
             taskEntity.tags ? taskEntity.tags.map(t => this.toTagDomain(t)) : [],
+            taskEntity.user,
             taskEntity.id
         );
     }
@@ -24,7 +25,7 @@ export class TaskEntityMapper {
         return new Comment(
             commentEntity.content,
             commentEntity.publishDate,
-            commentEntity.id
+            commentEntity.user
         );
     }
 

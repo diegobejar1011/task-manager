@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { CommentDto } from "./comment.dto";
 import { TagDto } from "./tag.dto";
+import { UserSummaryDto } from "src/users/infra/dtos/user-summary.dto";
 
 export class TaskDetailDto {
     @ApiProperty({
@@ -29,14 +30,20 @@ export class TaskDetailDto {
         type: [TagDto]
     })
     tags: TagDto[];
+    @ApiProperty({
+        description: "user who create task",
+        type: UserSummaryDto
+    })
+    user: UserSummaryDto;
 
     constructor(
         title: string,
         description: string,
         completed: boolean,
-        submissionDate: string | null,
+        submissionDate: string,
         comments: CommentDto[],
-        tags: TagDto[]
+        tags: TagDto[],
+        user: UserSummaryDto
     ) {
         this.title = title;
         this.description = description;
@@ -44,5 +51,6 @@ export class TaskDetailDto {
         this.submissionDate = submissionDate;
         this.comments = comments;
         this.tags = tags;
+        this.user = user;
     }
 }

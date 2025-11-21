@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { TaskEntity } from "./task.entity";
+import { UserEntity } from "src/users/infra/entities/user.entity";
 
 @Entity('comments')
 export class CommentEntity {
@@ -16,4 +17,8 @@ export class CommentEntity {
     @ManyToOne(() => TaskEntity, task => task.comments, {onDelete: 'CASCADE'})
     @JoinColumn({name: 'task_id'})
     task: TaskEntity;
+
+    @ManyToOne(() => UserEntity, user => user.comments)
+    @JoinColumn({name: 'user_id'})
+    user: UserEntity;
 }

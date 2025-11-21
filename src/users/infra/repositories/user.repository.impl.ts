@@ -12,6 +12,16 @@ export class UserRepositoryImpl implements UserRepository {
         private readonly userRepository: Repository<UserEntity>
     ) {}
 
+    async findOne(id: number): Promise<User> {
+        try {
+            const user = await this.userRepository.findOne({where: {id}});
+            if(!user) throw new NotFoundException('User not found!');
+            return user;
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
+    }
+
     async createUser(user: UserEntity): Promise<void> {
         try {
             const newUser = this.userRepository.create(user);

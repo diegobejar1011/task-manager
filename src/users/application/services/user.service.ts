@@ -35,4 +35,13 @@ export class UserService {
             throw new InternalServerErrorException(error.message);
         }
     }
+
+    async findOne(id: number): Promise<UserEntity> {
+        try {
+            return await this.userRepository.findOne(id);
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
+    }
+
 }
