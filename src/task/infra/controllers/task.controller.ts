@@ -1,11 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
 import { TaskService } from "src/task/application/services/task.service";
 import { CreateTaskDto } from "../dtos/create-task.dto";
 import { TaskInfraMapper } from "../mappers/task-infra.mapper";
 import { TaskSummaryDto } from "../dtos/task-summary.dto";
-import { ApiBody, ApiOkResponse, ApiTags } from "@nestjs/swagger";
-import { CommentDto, TaskDetailDto, UpdateTaskDto } from "../dtos";
-
+import { ApiBody, ApiOkResponse, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { TaskDetailDto, UpdateTaskDto } from "../dtos";
+import { PaginationParams } from "src/shared/decorators/pagination-params.decorator";
+import { PaginationEntity } from "src/shared/entities/pagination.entity";
 
 @ApiTags('tasks')
 @Controller("/tasks")
@@ -15,13 +16,18 @@ export class TaskController {
         private readonly taskInfraMapper: TaskInfraMapper
     ) {}
 
+    
     @ApiOkResponse({
         description: 'list of tasks',
         type: [TaskSummaryDto]
     })
+    @ApiQuery({ name: 'page', required: false, type: Number, description: 'page of items' })
+    @ApiQuery({ name: 'size', required: false, type: Number, description: 'item list size' })
     @Get()
-    public async getAll(): Promise<TaskSummaryDto[]> {
-        const tasks = await this.taskServices.findAll();
+    public async getAll(
+        @PaginationParams() pagination: PaginationEntity
+    ): Promise<TaskSummaryDto[]> {
+        const tasks = await this.taskServices.findAll(pagination);
         return this.taskInfraMapper.toTaskSummaryDtoList(tasks);
     }
 

@@ -6,6 +6,7 @@ import { In, Repository } from "typeorm";
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { TaskEntityMapper } from "../mappers/task-entity.mapper";
 import { TagEntity } from "../entities/tag.entity";
+import { PaginationEntity } from "src/shared/entities/pagination.entity";
 
 @Injectable()
 export class TaskRepositoryImpl implements TaskRepository {
@@ -17,9 +18,15 @@ export class TaskRepositoryImpl implements TaskRepository {
         private readonly tagRepository: Repository<TagEntity>
     ) {}
 
-    async findAll(): Promise<Task[]> {
+    async findAll(pagination: PaginationEntity): Promise<Task[]> {
         try {
-            const tasks: TaskEntity[] = await this.taskRepository.find({select: {id: true, title: true, isCompleted: true, submissionDate: true}});
+
+            const tasks: TaskEntity[] = await this.taskRepository.find({
+                select: {id: true, title: true, isCompleted: true, submissionDate: true},
+                skip: pagination.offset,
+                take: pagination.limit
+            });
+
             if (tasks.length == 0) return [];
             return this.taskEntityMapper.toDomainList(tasks);
         } catch (error) {

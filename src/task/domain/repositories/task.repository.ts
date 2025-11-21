@@ -1,7 +1,8 @@
+import { PaginationEntity } from "src/shared/entities/pagination.entity";
 import { TaskEntity } from "../entities";
 
 export interface TaskRepository {
-    findAll(): Promise<TaskEntity[]>;
+    findAll(pagination: PaginationEntity): Promise<TaskEntity[]>;
     findOne(id: number): Promise<TaskEntity>;
     create(task: TaskEntity): Promise<void>;
     update(task: TaskEntity): Promise<void>;
