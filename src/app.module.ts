@@ -12,7 +12,7 @@ import { TaskModule } from './task/task.module';
       username: envsValues.db.user,
       password: envsValues.db.pass,
       database: envsValues.db.name,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: [__dirname + '/*/infra/**/*.entity{.ts,.js}'],
       synchronize: true
     }),
     TaskModule
