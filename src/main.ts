@@ -11,6 +11,15 @@ async function bootstrap() {
     .setTitle('Task-Manager')
     .setDescription('API Rest to manage tasks')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        in: 'header',
+      },
+      'JWT-auth'
+    )
     .build();
     
   const document = SwaggerModule.createDocument(app, options);
