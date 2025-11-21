@@ -9,6 +9,7 @@ import { TaskAppMapper } from "./application/mappers/task-app.mapper";
 import { TaskService } from "./application/services/task.service";
 import { TaskController } from "./infra/controllers/task.controller";
 import { TaskInfraMapper } from "./infra/mappers/task-infra.mapper";
+import { AuthModule } from "src/auth/auth.module";
 
 @Module({
     imports: [
@@ -16,7 +17,8 @@ import { TaskInfraMapper } from "./infra/mappers/task-infra.mapper";
             TagEntity,
             TaskEntity,
             CommentEntity
-        ])
+        ]),
+        AuthModule
     ],
     providers: [
         TaskEntityMapper,

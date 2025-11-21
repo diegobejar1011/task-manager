@@ -1,13 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { TaskService } from "src/task/application/services/task.service";
 import { CreateTaskDto } from "../dtos/create-task.dto";
 import { TaskInfraMapper } from "../mappers/task-infra.mapper";
 import { TaskSummaryDto } from "../dtos/task-summary.dto";
-import { ApiBody, ApiOkResponse, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { TaskDetailDto, UpdateTaskDto } from "../dtos";
 import { PaginationParams } from "src/shared/decorators/pagination-params.decorator";
 import { PaginationEntity } from "src/shared/entities/pagination.entity";
+import { JwtGuard } from "src/auth/infra/guards/jwt.guard";
 
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtGuard)
 @ApiTags('tasks')
 @Controller("/tasks")
 export class TaskController {
