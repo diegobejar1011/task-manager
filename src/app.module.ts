@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { envsValues } from './core/config/getEnvs';
 import { TaskModule } from './task/task.module';
+import { UserModule } from './users/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -15,7 +17,9 @@ import { TaskModule } from './task/task.module';
       entities: [__dirname + '/*/infra/**/*.entity{.ts,.js}'],
       synchronize: true
     }),
-    TaskModule
+    TaskModule,
+    UserModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],
