@@ -49,6 +49,27 @@ cp .env.example .env
 npm run start:dev
 ```
 
+# API Documentation
+
+Documentación disponible en: `/docs`
+
+## Endpoints
+
+### Users
+- `POST /users` - Crear usuario
+
+### Auth
+- `POST /auth` - Autenticación
+
+### Tasks (Protegidas - Requieren Authorization)
+- `GET /tasks` - Obtener todas las tareas
+- `GET /tasks/:id` - Obtener una tarea
+- `POST /tasks` - Crear tarea
+- `PUT /tasks/:id` - Actualizar tarea
+- `DELETE /tasks/:id` - Eliminar tarea
+
+**Nota:** Los endpoints de tasks requieren token Bearer en el header Authorization.
+
 ## 🚀 Uso Básico
 
 1. Registrar usuario en `/auth/register`
